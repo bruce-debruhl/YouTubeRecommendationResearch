@@ -26,7 +26,7 @@ for x in mydoc:
   vidStr = "\n" + (x["id"]) + "\n" + (x["title"]) + "\n" + (x["channelID"]) + "\n" + "______________________________________________"
 
   with open('db.txt', 'a') as fp:
-				fp.write(vidStr.encode('utf8'))
+      fp.write(vidStr.encode('utf8'))
 
 # counting virus-related entries
 # mydoc = COL.find().sort("date")
@@ -40,5 +40,3 @@ for x in mydoc:
 #     count += 1
 
 # print(count)
-
-

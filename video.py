@@ -15,16 +15,16 @@ class Video:
 			try:
 				self.comments = fill_comments(self.id)
 			except:
-				self.comments = []	
+				self.comments = []
 
-		elif flag == 1:	
+		elif flag == 1:
 			self.id = data["id"]
 			self.title = data["title"]
 			self.description = data["description"]
 			self.channelID = data["channelID"]
 			self.tags = data["tags"]
 			self.categoryID = data["categoryID"]
-			self.recs = data["recs"]	
+			self.recs = data["recs"]
 
 
 	def toString(self):

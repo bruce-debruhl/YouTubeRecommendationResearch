@@ -13,12 +13,10 @@ class Simple:
     def toString(self):
         return "a: " + str(self.a) + ", b: " + self.b
 
-
-
-
 CLIENT = pymongo.MongoClient("mongodb://py-user:pyuser1@cluster0-shard-00-00-gm9y9.mongodb.net:27017,cluster0-shard-00-01-gm9y9.mongodb.net:27017,cluster0-shard-00-02-gm9y9.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority")
 DB = CLIENT['ReSeed']
-COL = DB['posts']
+# COL = DB['posts']
+COL = DB['testPosts']
 
 count = 0
 l = []
@@ -43,6 +41,7 @@ def recurse(vid, parent):
     children = vid.recs
 
     # print(children)
+    print("count: ", count)
 
     for child in children:
 
@@ -52,14 +51,14 @@ def recurse(vid, parent):
         # search db again to find something thats red and NOT GREEN
 
         childID = child[1]
-        # print(childID)
+        # print("childID: ", childID)
 
         childDBentry = COL.find_one({"id": childID})
-        # print(childDBentry)
+        #print("childDBentry: ", childDBentry)
 
         if childDBentry != None:
             childVideoObj = Video('null', childDBentry, 1)
-                    
+
             if childID not in l:
                 recurse(childVideoObj, vidNode)
             else:
@@ -71,10 +70,6 @@ def recurse(vid, parent):
 
         # solutions
         # skip the branch
-
-
-
-
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -96,15 +91,5 @@ a = Node("a")
 rootVidObj = Video('null', rootVid, 1)
 rootChildren = rootVidObj.recs
 recurse(rootVidObj, a)
+
 DotExporter(a).to_picture("d.png")
-
-
-
-
-
-        
-
-
-
-
-
