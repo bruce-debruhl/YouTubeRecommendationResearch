@@ -2,6 +2,7 @@ import argparse
 import json
 import pymongo
 import datetime
+from youtube_transcript_api import YouTubeTranscriptApi
 
 # repeat videos - do not repeat videos in DB
 
@@ -41,6 +42,7 @@ class Video:
 			self.tags = vidInfo[4]
 			self.categoryID = vidInfo[5]
 			self.recs = fill_recs(self.id)
+			self.transcript = vidInfo[6]
 
 			try:
 				self.comments = fill_comments(self.id)
@@ -54,7 +56,8 @@ class Video:
 			self.channelID = data["channelID"]
 			self.tags = data["tags"]
 			self.categoryID = data["categoryID"]
-			self.recs = data["recs"]	
+			self.recs = data["recs"]
+			self.transcript = data["transcript"]
 
 
 	def toString(self):
@@ -91,6 +94,9 @@ def vid_info_request(videoID):
 		vidInfo.append([])
 
 	vidInfo.append(response["items"][0]["snippet"]["categoryId"])
+    
+    # get transcript
+	vidInfo.append(get_transcript(videoID))
 
 	return vidInfo
 
@@ -104,6 +110,7 @@ def vidToJSON(vid):
 		 "categoryID" : vid.categoryID,
 		 "recs" : vid.recs,
 		 "comments" : vid.comments,
+		 "transcript" : vid.transcript,
          }
 
 def vidToJSON_forDB(vid):
@@ -116,6 +123,7 @@ def vidToJSON_forDB(vid):
 		 "categoryID" : vid.categoryID,
 		 "recs" : vid.recs,
 		 "comments" : vid.comments,
+		 "transcript" : vid.transcript,
 		 "date" : datetime.datetime.utcnow()
          }
 
@@ -139,6 +147,18 @@ def fill_recs(parentID):
 		recs.append((parentID, response['items'][i]['id']['videoId']))
 
 	return recs
+
+
+def get_transcript(videoID):
+    print("Getting transcript...", flush=True)
+    transcript = YouTubeTranscriptApi.get_transcript(videoID)
+
+    # convert the transcript into a long string
+    res = ''
+    for d in transcript:
+        res = res + ' ' + d['text']
+    print("Got it!", flush=True)
+    return res
 
 def recs_request(videoID):
 	try:
