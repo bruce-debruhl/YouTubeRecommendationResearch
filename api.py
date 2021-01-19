@@ -150,15 +150,19 @@ def fill_recs(parentID):
 
 
 def get_transcript(videoID):
-    print("Getting transcript...", flush=True)
-    transcript = YouTubeTranscriptApi.get_transcript(videoID)
+	transcript = YouTubeTranscriptApi.get_transcript(videoID)
+	
+	# convert the transcript into a dict that counts occurrence of words
+	res = {}
+	for d in transcript:
+		for word in d['text']:
+			if word not in res:
+				res[word] = 1
+			else:
+				res[word] = res[word] + 1
 
-    # convert the transcript into a long string
-    res = ''
-    for d in transcript:
-        res = res + ' ' + d['text']
-    print("Got it!", flush=True)
-    return res
+	return res
+
 
 def recs_request(videoID):
 	try:
