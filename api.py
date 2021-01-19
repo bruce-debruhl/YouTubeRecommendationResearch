@@ -25,7 +25,7 @@ CLIENT = pymongo.MongoClient("mongodb://py-user:pyuser1@cluster0-shard-00-00-gm9
 DB = CLIENT['ReSeed']
 COL = DB['Videos']
 
-NUM_VIDS = 100000
+NUM_VIDS = 10000
 
 q = queue.Queue()
 
