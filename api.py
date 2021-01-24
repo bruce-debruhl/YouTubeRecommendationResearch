@@ -4,6 +4,9 @@ import pymongo
 import datetime
 from youtube_transcript_api import YouTubeTranscriptApi
 
+from nltk.stem import PorterStemmer
+ps = PorterStemmer()
+
 # repeat videos - do not repeat videos in DB
 
 try:
@@ -156,6 +159,7 @@ def get_transcript(videoID):
 	res = {}
 	for d in transcript:
 		for word in d['text']:
+			word = ps.stem(word)
 			if word not in res:
 				res[word] = 1
 			else:
